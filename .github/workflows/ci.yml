@@ -30,8 +30,9 @@ jobs:
   deploy:
     needs: build
     runs-on: ubuntu-latest
+
     steps:
-      - name: Deploy to server via SSH
+      - name: Deploy FastAPI container via SSH
         uses: appleboy/ssh-action@v0.1.7
         with:
           host: ${{ secrets.SERVER_HOST }}
@@ -39,42 +40,6 @@ jobs:
           key: ${{ secrets.SERVER_SSH_KEY }}
           port: ${{ secrets.SERVER_PORT }}
           script: |
-            # Detect OS
-            if [ -f /etc/os-release ]; then
-              . /etc/os-release
-              OS=$ID
-            else
-              OS=$(uname -s)
-            fi
-
-            echo "Detected OS: $OS"
-
-            # Install Docker if not installed
-            if ! command -v docker &> /dev/null; then
-              echo "Docker not found. Installing Docker..."
-              
-              if [ "$OS" = "amzn" ] || [ "$OS" = "amazon" ]; then
-                # Amazon Linux 2
-                sudo amazon-linux-extras install docker -y
-                sudo systemctl start docker
-                sudo systemctl enable docker
-                sudo usermod -aG docker $USER
-                newgrp docker
-              elif [ "$OS" = "ubuntu" ]; then
-                # Ubuntu
-                sudo apt update -y
-                sudo apt install -y docker.io
-                sudo systemctl start docker
-                sudo systemctl enable docker
-              else
-                echo "Unsupported OS: $OS"
-                exit 1
-              fi
-            else
-              echo "Docker is already installed."
-            fi
-
-            # Deploy FastAPI container
             echo "Pulling latest Docker image..."
             docker pull tranducthai/fastapi-app:latest
 
