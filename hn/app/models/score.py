@@ -17,5 +17,5 @@ class Score(BaseModel):
         ..., 
         min_items=8, 
         max_items=8, 
-        description="Mảng gồm đúng 8 số (float)"
+        description="Mảnggồm đúng 8 số (float)"
     )
