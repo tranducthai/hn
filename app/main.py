@@ -52,11 +52,11 @@ app = FastAPI(
 # Add CORS middleware
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # Configure appropriately for production
+    allow_origins=["http://localhost:3000"],   # FE origin
+    allow_credentials=True,                    # Quan trọng!
     allow_methods=["*"],
     allow_headers=["*"],
 )
-
 
 @app.get("/", tags=["root"])
 async def root():
